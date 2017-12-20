@@ -3,11 +3,16 @@ import argparse
 import doctest
 import os
 
+from address_book import AddressBook
+from address_book import Contact
 from apps import ZeroApp
 from ui import NumberedMenu, Listbox
-
-from address_book import AddressBook, ZPUI_HOME, Contact
 from vcard_converter import VCardContactConverter
+
+ZPUI_HOME = "~/.zpui/"  # todo : XDG_DATA_DIR/zpui
+SAVE_FILENAME = "contacts.pickle"
+
+
 
 class ContactApp(ZeroApp):
     def __init__(self, i, o):

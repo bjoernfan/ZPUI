@@ -10,6 +10,7 @@ except ImportError:
 
 from address_book import Contact
 
+
 class VCardContactConverter(object):
     vcard_mapping = {
         'fn': 'name',
@@ -38,9 +39,9 @@ class VCardContactConverter(object):
     def parse_vcard_file(file_path):
         # type: (str) -> list
         file_content = VCardContactConverter.read_file_content(file_path)
-        contacts = [c for c in vobject.readComponents(file_content, ignoreUnreadable=True)]
-        logging.info("Found {} contact in file {}", len(contacts), file_path)
-        return contacts
+        vcard_contacts = VCardContactConverter.from_string(file_content)
+        logging.info("Found {} contact in file {}", len(vcard_contacts), file_path)
+        return vcard_contacts
 
     @staticmethod
     def read_file_content(file_path):
@@ -56,3 +57,9 @@ class VCardContactConverter(object):
             contacts += VCardContactConverter.parse_vcard_file(file_path)
         logging.info("finished : {} contacts loaded", len(contacts))
         return [VCardContactConverter.to_zpui_contact(c) for c in contacts]
+
+    @classmethod
+    def from_string(cls, vcard_string):
+        # type: (str) -> list
+        # Returns a list of ZPUI contacts from a string in vcard format
+        return [c for c in vobject.readComponents(vcard_string, ignoreUnreadable=True)]
