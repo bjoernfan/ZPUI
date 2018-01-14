@@ -20,7 +20,8 @@ apt-get install \
   python-pip \
   python-pygame \
   python-serial \
-  python-smbus
+  python-smbus \
+  python-systemd
 
 pip2 install -r requirements.txt
 
