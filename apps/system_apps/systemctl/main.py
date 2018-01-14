@@ -60,10 +60,9 @@ def pinned_units():
 
 def filtered_units():
     menu_contents = []
-    units = systemctl.list_units()
-    for unit in units: 
-        if unit["type"] in config["allowed_types"]:
-            menu_contents.append([unit["basename"], lambda x=unit: unit_menu(x)])
+    units = systemctl.list_units("type", config["allowed_types"])
+    for unit in units:
+        menu_contents.append([unit["basename"], lambda x=unit: unit_menu(x)])
     Menu(menu_contents, i, o, "Systemctl: filtered unit list menu").activate()
 
 def unit_menu(unit, in_pinned=False):
