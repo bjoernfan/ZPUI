@@ -10,13 +10,28 @@ then
    exit 1
 fi
 
-[ -f config.json ] || cp default_config.json config.json
-apt-get install python python-pip python-smbus python-dev python-pygame libjpeg-dev python-serial nmap
+test -f config.json || cp default_config.json config.json
+
+apt-get install \
+  libjpeg-dev \
+  nmap
+  python \
+  python-dev \
+  python-pip \
+  python-pygame \
+  python-serial \
+  python-smbus
+
 pip2 install -r requirements.txt
-mkdir -p ${INSTALL_DIR}
-cp ./. ${INSTALL_DIR} -R
-cd ${INSTALL_DIR}
+
+mkdir -p "$INSTALL_DIR"
+
+cp ./. "$INSTALL_DIR" -R
+
+cd "$INSTALL_DIR"
+
 cp zpui.service /etc/systemd/system/
+
 systemctl daemon-reload
 systemctl enable zpui.service
 systemctl start zpui.service
