@@ -3,23 +3,25 @@ from pydbus import SystemBus
 
 logger = setup_logger(__name__, "warning")
 
+# Also see D-Bus documentation here:
+#     https://www.freedesktop.org/wiki/Software/systemd/dbus/
+
 bus = SystemBus()
 systemd = bus.get(".systemd1")
 
-def list_units(unit_filter_field = None, unit_filter_value = None):
+def list_units(unit_filter_field = None, unit_filter_values = []):
     units = []
 
     for unit in systemd.ListUnits():
         name, description, load, active, sub, follower, unit_object_path, job_queued, job_type, job_object_path = unit
 
-        basename, type = name.rsplit('.', 1)
+        basename, unit_type = name.rsplit('.', 1)
 
-        # FIXME: eval() should probably be getattr() somehow
-        if unit_filter_field is None or eval(unit_filter_field) in unit_filter_value:
+        if unit_filter_field is None or locals()[unit_filter_field] in unit_filter_values:
             units.append({
                 "name": name,
                 "basename": basename,
-                "type": type,
+                "type": unit_type,
                 "description": description,
                 "load": load,
                 "active": active,
